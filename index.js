@@ -2,21 +2,21 @@ const express = require("express");
 var app = express();
 const mysql = require("mysql");
 const path = require('path');
-// const connection = mysql.createConnection({
-//     host: "localhost",
-//     port: "3306",
-//     user: "root",
-//     password: "",
-//     database: "mydb"
+ const connection = mysql.createConnection({
+    host: "localhost",
+    port: "3306",
+    user: "root",
+    password: "",
+    database: "mydb"
 
-// });
-// connection.connect(function (err) {
-//     if (err) {
-//         console.error("erro conectando banco: " + err.stack)
-//         return;
-//     }
-//     console.log("Banco conectado")
-// });
+ });
+connection.connect(function (err) {
+     if (err) {
+         console.error("erro conectando banco: " + err.stack)
+         return;
+     }
+     console.log("Banco conectado")
+});
 
 
 app.use(express.static('public'));
@@ -26,6 +26,23 @@ app.use(express.static('public'));
 app.use('/', function (req, res) {
     res.sendFile(path.join(__dirname, "public", 'index.html'));
     
+})
+
+app.post('/inputar', function(req, res){
+    connection.query(`insert into produtos(nome, valor) values ('${req.body.nome}', '${req.body.valor}')`, function (error, results, fields) {
+        if (error)
+            res.json(error);
+        else
+            res.json({ "valor": "funfo" })
+    });
+})
+app.get('/listar', function(req, res){
+    connection.query(`select * from produtos`, function(error, results, fields){
+        if(error)
+        res.json(error);
+        else
+        res.json(results)
+    })
 })
 
 

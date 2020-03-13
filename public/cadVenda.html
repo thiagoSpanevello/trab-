@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Simple Sidebar - Start Bootstrap Template</title>
+  <title>Lojinha do seu João</title>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -25,12 +25,12 @@
 
     <!-- Sidebar -->
     <div class="static border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading" style="font-size: 30px">Cadastro de Vendas</div>
+      <div class="sidebar-heading " style="font-size: 40px">Cadastro de Vendas</div>
       <div class="list-group list-group-flush">
-        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px">Vendas</div>
+        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
         <a href="/cadVenda.html" class="list-group-item list-group-item-action bg-light">Nova venda</a>
         <a href="/listaVenda.html" class="list-group-item list-group-item-action bg-light">Histórico de Vendas</a>
-        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px"> Produtos</div>
+        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
         <a href="/cadProd.html" class="list-group-item list-group-item-action bg-light">Novo Produto</a>
         <a href="/listaProd.html" class="list-group-item list-group-item-action bg-light">Listagem de Produtos</a>
       </div>
@@ -51,14 +51,13 @@
         </div>
       </nav>
       <div>
-
         <form>
-        <h1 class="texto">Nova Venda</h1>
-        <br>
-        <br>
-        <input  style="padding-left: 2%" id="pesqProdId" type="number" placeholder="Pesquisa Produto(id)"/>
-        <input class="quant" type="number", id="quantidade", min="1", />
-    </form>
+          <h1 class="texto">Nova Venda</h1>
+          <br>
+          <br>
+          <input style="padding-left: 2%; width: 30%" id="pesqProdId" type="number" min="0" placeholder="Pesquisa Produto(id)" />
+          <input type="number" , id="quantidade" , min="1" , style="width: 4%", placeholder="QT" />
+        </form>
 
       </div>
     </div>

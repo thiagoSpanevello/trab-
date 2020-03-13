@@ -17,9 +17,9 @@ body {
   font-size: 30px;
   padding-left: 5%;
 }
-.quant{
-  position: fixed;
-  padding-right: 60%;
+
+.alinhar{
+  text-align: center;
 }
 
 
@@ -66,6 +66,6 @@ body {
   .botao{
     font-size: 30px; 
     background-color: black; 
-    color: white
+    color: white;
   }
 }

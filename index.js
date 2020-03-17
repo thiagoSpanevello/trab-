@@ -2,6 +2,9 @@ const express = require("express");
 var app = express();
 const mysql = require("mysql");
 const path = require('path');
+const bodyparser = require('body-parser');
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: true }));
  const connection = mysql.createConnection({
     host: "localhost",
     port: "3306",
@@ -23,12 +26,17 @@ app.use(express.static('public'));
 
 
 // rotas 
-app.use('/', function (req, res) {
+app.get('/', function (req, res) {
+    console.log(req.url);
+    
     res.sendFile(path.join(__dirname, "public", 'index.html'));
     
 })
 
-app.post('/inputar', function(req, res){
+//post prod
+app.post('/produtos', function(req, res){
+    console.log(req.body);
+    
     connection.query(`insert into produtos(nome, valor) values ('${req.body.nome}', '${req.body.valor}')`, function (error, results, fields) {
         if (error)
             res.json(error);
@@ -36,8 +44,20 @@ app.post('/inputar', function(req, res){
             res.json({ "valor": "funfo" })
     });
 })
-app.get('/listar', function(req, res){
+
+//get prod
+app.get('/produtos', function(req, res){
     connection.query(`select * from produtos`, function(error, results, fields){
+        if(error)
+        res.json(error);
+        else
+        res.json(results)
+    })
+})
+
+// get vendas
+app.get('/vendas', function(req, res){
+    connection.query(`select * from vendas`, function(error, results, fields){
         if(error)
         res.json(error);
         else

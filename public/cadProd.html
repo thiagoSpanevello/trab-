@@ -28,15 +28,14 @@
             console.log(nome);
             var objeto = { 'nome': nome, 'valor': valor };
             console.log('Posting...');
-            fetch('http://localhost/inputar', {
+            fetch('http://localhost/produtos', {
                 method: 'post',
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(objeto)
             }).then(function (response) {
-                console.log(response);
-                alert("alooo")
+                console.log(response);    
             });
         }
 
@@ -86,7 +85,7 @@
                 <br>
                 <br>
                 <br>
-                <button class="botao" onclick="enviar()">Adicionar Produto</button>
+                <button class="botao" onclick="enviar()" type="button">Adicionar Produto</button>
             </form>
            
         </div>

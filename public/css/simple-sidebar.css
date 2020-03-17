@@ -15,12 +15,29 @@ body {
 .texto{
   float: left;
   font-size: 30px;
-  padding-left: 5%;
+  padding-left: 16.5%;
 }
 
 .alinhar{
   text-align: center;
 }
+.linhas{
+  border-right:1px solid black;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.linhaItem{
+  border-right: 1px solid black;
+}
+
+.padding{
+  padding-bottom: 3px!important;
+  padding-left: 3px!important;
+  padding-right: 3px!important;
+  padding-top: 3px!important;
+}
+
 
 
 #sidebar-wrapper {

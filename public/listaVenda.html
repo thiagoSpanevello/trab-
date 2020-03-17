@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
@@ -24,9 +23,37 @@
   integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384"></script>
 
+<script>
+
+function alo(){
+  let url = 'http://localhost/vendas';
+var tab = document.getElementById("tab");
+
+fetch(url)
+    .then(res => res.json())
+    .then((out) => {
+        console.log('Json ', out);
+        out.forEach(vendas => {
+          let id = vendas.id;
+            let data = vendas.data_hora;
+            console.log(data);
+            console.log(id);
+            let regex = /(?<ano>\d\d\d\d)-(?<mes>\d\d)-(?<dia>\d\d)/;
+              let x = data.match(regex);
+              let day = x.groups.dia;
+              console.log(day);
+              
+            
+            tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${id}</span></div> <div class='col linhaItem' style='text-align: right'>${data}</div></div>`
+        });
+    })
+  }
+
+</script>
+
 </head>
 
-<body>
+<body onload="alo()">
 
   <div class="d-flex" id="wrapper">
 
@@ -57,6 +84,17 @@
           </ul>
         </div>
       </nav>
+      <span>Histórico de Vendas</span>
+      <div class="container col-8" id="tab">
+        <div class="row" style="border: 1px solid black">
+          <div class="col" style="border-right: 1px solid black; text-align: center">
+            Id
+          </div >
+          <div class="col" style="border-right: 1px solid black; text-align: center">
+            Data Hora
+          </div >
+        </div>
+      </div>
     </div>
 </body>
 

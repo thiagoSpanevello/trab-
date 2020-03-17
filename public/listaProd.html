@@ -25,17 +25,19 @@
 
 function listar() {
 
-let url = 'http://localhost/listar';
-var div = document.getElementById("Resultado");
+let url = 'http://localhost/produtos';
+var tab = document.getElementById("tabela");
+
 fetch(url)
     .then(res => res.json())
     .then((out) => {
-        console.log('Checkout this JSON! ', out);
+        console.log('Json', out);
         out.forEach(Produto => {
             let num = Produto.id;
             let nome = Produto.nome;
-            let valor = Produto.valor
-            div.innerHTML += "Numero: " + num + " ," + " Nome: " + nome + " ," + "Valor: " + valor + " ;" + "<br>";
+            let valor = Produto.valor;
+            
+            tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${num}</span></div> <div class='col linhaItem' style='text-align: center'>${nome}</div> <div class='col linhaItem' style='text-align: right'>R$ ${valor},00</div><div class="padding" style: 'text-align: center;'><button type='button'>Edit</button> <button type= "button">Del</button></div></div>`
         });
     })
     .catch(err => { throw err });
@@ -76,20 +78,28 @@ fetch(url)
           </ul>
         </div>
       </nav>
-      <div class="container">
-        <div class="row">
-          <div class="col-4" style="border-style: solid; border-color: black">
+      <div class="container col-8" id="tabela">
+        <div class="row" style="border: 1px solid black">
+          <div class="col" style="border-right: 1px solid black; text-align: center">
             Id
           </div>
-          <div class="col-4" style="border-style: solid; border-color: black">
+          <div class="col" style="border-right: 1px solid black; text-align: center">
             Nome
           </div>
-          <div class="col-4" style="border-style: solid; border-color: black">
+          <div class="col" style="border-right: 1px solid black;text-align: center">
             Valor
           </div>
+          <div style="min-width:92.67px; text-align: center ">Ações</div>
         </div>
       </div>
     </div>
+
+    <!-- var button = document.createElement('button');
+    button.setAttribute('type','button')
+    button.appendChild(document.createTextNode('Add')); -->
 </body>
 
+
 </html>
+
+

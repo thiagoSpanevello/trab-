@@ -37,7 +37,7 @@ fetch(url)
             let nome = Produto.nome;
             let valor = Produto.valor;
             
-            tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${num}</span></div> <div class='col linhaItem' style='text-align: center'>${nome}</div> <div class='col linhaItem' style='text-align: right'>R$ ${valor},00</div><div class="padding" style: 'text-align: center;'><button type='button'>Edit</button> <button type= "button">Del</button></div></div>`
+            tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${num}</span></div> <div class='col linhaItem' style='text-align: center'>${nome}</div> <div class='col linhaItem' style='text-align: right'>R$${(valor).toLocaleString("pt-BR")}</div><div class="padding" style: 'text-align: center;'><button type='button'>Edit</button> <button type= "button">Del</button></div></div>`
         });
     })
     .catch(err => { throw err });

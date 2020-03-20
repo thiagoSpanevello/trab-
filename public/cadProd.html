@@ -13,19 +13,18 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
     <!-- Custom styles for this template -->
     <link href="css/simple-sidebar.css" rel="stylesheet">
     
 
     <script>
-
         function enviar(jsonObj) {
-
             var valor = document.getElementById('valProd').value;
             var nome = document.getElementById('nomeProd').value;
             console.log(valor);
             console.log(nome);
+            var string = valor.toString;
+            console.log(string);    
             var objeto = { 'nome': nome, 'valor': valor };
             console.log('Posting...');
             fetch('http://localhost/produtos', {
@@ -38,12 +37,21 @@
                 console.log(response);    
             });
         }
-
+        function formatReal()
+{       
+        var tmp = document.getElementById('valProd').value + '';
+        console.log(tmp);
+        tmp = tmp.replace(/([0-9]{2})$/g, ",$1");
+        if( tmp.length > 6 ){
+                tmp = tmp.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+        }
+        document.getElementById('valProd').value = tmp;
+}
     </script>
+    
+</head >
 
-</head>
-
-<body>
+<body onfocusout="formatReal()">
 
     <div class="d-flex" id="wrapper">
 
@@ -79,9 +87,9 @@
 
             <form autocomplete="off" class="alinhar">
                 <h2>Nome do Produto</h2>
-                <input id="nomeProd" />
+                <input id="nomeProd" maxlength="50"/>
                 <h2>Valor do Produto</h2>
-                <input type="number" id="valProd" min="0" step="0.01" />
+                <input type="text" id="valProd" min="0" step="0.01" />
                 <br>
                 <br>
                 <br>

@@ -67,4 +67,23 @@ app.get('/vendas', function(req, res){
     })
 })
 
+// del prod
+ app.delete('/delProdutos/:id', function(req, res){
+     let ide = req.params.id;
+      connection.query(`delete from produtos where id = ${ide}`, function(error, results, fields){
+          if(error)
+          res.json(error)
+          else
+          res.json(results);
+      })
+ })
+
+// update prod
+app.patch('/updateProd/:id/:nome/:valor', function(req, res){
+    let ide = req.params.id;
+    let nom = req.params.nome;
+    let val = req.params.val;
+    
+})
+
 app.listen(80, function () { console.log('example app listening on port 80') });

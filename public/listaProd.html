@@ -24,7 +24,6 @@
 <script>
 
 function listar() {
-
 let url = 'http://localhost/produtos';
 var tab = document.getElementById("tabela");
 
@@ -37,12 +36,42 @@ fetch(url)
             let nome = Produto.nome;
             let valor = Produto.valor;
             
-            tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${num}</span></div> <div class='col linhaItem' style='text-align: center'>${nome}</div> <div class='col linhaItem' style='text-align: right'>R$${(valor).toLocaleString("pt-BR")}</div><div class="padding" style: 'text-align: center;'><button type='button'>Edit</button> <button type= "button">Del</button></div></div>`
+            tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${num}</span></div> <div class='col linhaItem' style='text-align: center'>${nome}</div> <div class='col linhaItem' style='text-align: right'>R$${(valor).toLocaleString("pt-BR")}</div><div class="padding" style: 'text-align: center;'><button type='button' onclick = "editar(${nome}, ${valor})">Edit</button> <button type= "button" onclick = "delProd(${num})">Del</button></div></div>`
         });
     })
     .catch(err => { throw err });
 }
+function delProd(num) {
+            console.log('deleting...');
+            fetch(`http://localhost/delProdutos/${num}`, {
+                method: 'delete',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            }).then(function (response) {
+                console.log(response);    
+            });
+          };
 
+function updateProd(num, nome, valor){
+  console.log('updating...');
+  fetch(`http://localhost/editProd/${num}`, {
+    method: 'update',
+    headers:{
+      "Content-Type": "application/json"
+    },
+  }).then(function(response){
+    console.log(response);
+  })
+};
+function editar(nome, valor){
+  var update = document.getElementById('update');
+  update.innerHTML += `<div><input type = "text" id = "nom"/></div><div><input type = "number" id = "val"/></div>`;
+  var inputNome = document.getElementById('nom');
+  var inputValor = document.getElementById('val');
+  inputNome.value = nome;
+  inputValor.value = valor;
+}
 </script>
 
 </head>
@@ -55,7 +84,7 @@ fetch(url)
     <div class="static border-right" id="sidebar-wrapper">
       <div class="sidebar-heading " style="font-size: 40px" style="font-size: 25px; text-align: center; padding-right: 20%;">Listagem de Produtos</div>
       <div class="list-group list-group-flush">
-        <div class="list-group-item list-group-item-action bg-dark" >Vendas</div>
+        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;" >Vendas</div>
         <a href="/cadVenda.html" class="list-group-item list-group-item-action bg-light">Nova venda</a>
         <a href="/listaVenda.html" class="list-group-item list-group-item-action bg-light">Histórico de Vendas</a>
         <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
@@ -94,9 +123,7 @@ fetch(url)
       </div>
     </div>
 
-    <!-- var button = document.createElement('button');
-    button.setAttribute('type','button')
-    button.appendChild(document.createTextNode('Add')); -->
+    <div id="update"></div>
 </body>
 
 

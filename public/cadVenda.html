@@ -16,21 +16,54 @@
 
   <!-- Custom styles for this template -->
   <link href="css/simple-sidebar.css" rel="stylesheet">
-<script>
-function teste(){
-  var tab = document.getElementById("tab")
-  var num = 1;
-  var nome = 'alo';
-  var valor = 5000;
-  tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'>${num}</div> <div class='col linhaItem' style='text-align: center'>${nome} </div><div class='col' style='text-align: right'>${valor}</div></div>`
-}
-
-</script>
+  <script>
+    let total = 0;
+    let idDel = 0
+    function teste() {
+      idDel++;
+      var tab = document.getElementById("tab")
+      var num = document.getElementById("pesqProdId").value;
+      var totalTx = document.getElementById("total");
+      let quant = parseFloat(document.getElementById('quantidade').value)
+      console.log(num);
+      let url = `http://localhost/addProdVenda/${num}`;
+      fetch(url)
+        .then(res => res.json())
+        .then((out) => {
+          console.log('Json', out);
+          if (out.length == 0) {
+            alert('id invalido')
+          } else {
+            out.forEach(Produto => {
+              let nome = Produto.nome;
+              let valor = parseFloat(Produto.valor);
+              console.log(valor);
+              let valorFormatado = valor.toLocaleString();
+              tab.innerHTML += `<div id="${idDel}" class='row linhas'> <div class='col linhaItem'>${num}</div> <div class='col linhaItem'>${nome}</div> <div class='col linhaItem' style='text-align: center'>${quant} </div><div class='col linhaItem' style='text-align: right'>R$ ${valorFormatado}</div><div><button onclick = "deletar(${idDel}, ${valor})">Delete</button></div></div>`
+              let val = valor * quant;
+              total += parseFloat(val);
+              console.log('total add');
+              
+              console.log(total);
+            totalTx.innerHTML = 'R$ ' + total.toLocaleString();
+            });
+          }
+        });
+    };  
+    function deletar(idDel, val){
+      document.getElementById(idDel).remove(document.getElementById(idDel));
+      total = total - val;
+      console.log('total del');
+      console.log(total);
+      let totalTx = document.getElementById('total');
+      totalTx.innerHTML = "R$" + total.toLocaleString();
+    }
+  </script>
 
 
 </head>
 
-<body onload="teste()">
+<body>
 
   <div class="d-flex" id="wrapper">
 
@@ -38,10 +71,12 @@ function teste(){
     <div class="static border-right" id="sidebar-wrapper">
       <div class="sidebar-heading " style="font-size: 40px">Cadastro de Vendas</div>
       <div class="list-group list-group-flush">
-        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
+        <div class="list-group-item list-group-item-action bg-dark"
+          style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
         <a href="/cadVenda.html" class="list-group-item list-group-item-action bg-light">Nova venda</a>
         <a href="/listaVenda.html" class="list-group-item list-group-item-action bg-light">Histórico de Vendas</a>
-        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
+        <div class="list-group-item list-group-item-action bg-dark"
+          style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
         <a href="/cadProd.html" class="list-group-item list-group-item-action bg-light">Novo Produto</a>
         <a href="/listaProd.html" class="list-group-item list-group-item-action bg-light">Listagem de Produtos</a>
       </div>
@@ -63,26 +98,37 @@ function teste(){
       </nav>
       <div>
         <form>
-          <h1 class="texto" >Nova Venda</h1>
+          <h1 class="texto">Nova Venda</h1>
           <br>
           <br>
-          <input style="margin-left: 16.5%; width: 30%" id="pesqProdId" type="number" min="0" placeholder="Pesquisa Produto(id)" />
-          <input type="number" , id="quantidade" , min="1" , style="width: 4%", placeholder="QT" />
-          <button type="button">Adicionar Produto</button>
+          <input style="margin-left: 16.7%; width: 30%" id="pesqProdId" type="number" min="0"
+            placeholder="Pesquisa Produto(id)" />
+          <input type="number" , id="quantidade" , min="1" , style="width: 4%" , value="1" />
+          <button type="button" onclick="teste()">Adicionar Produto</button>
         </form>
         <div class="container col-8" id="tab">
           <div class="row" style="border: 1px solid black">
             <div class="col" style="border-right: 1px solid black; text-align: center">
               id
-            </div >
+            </div>
             <div class="col" style="border-right: 1px solid black; text-align: center">
               nome
-            </div >
-            <div class="col" style="text-align: center">
+            </div>
+            <div class="col" style="border-right: 1px solid black; text-align: center">
+              quantidade
+            </div>
+            <div class="col" style="border-right: 1px solid black;text-align: center">
               valor
             </div>
+            <div style="text-align: center; min-width: 61.63px;">
+              Ação
+            </div>
+
           </div>
         </div>
+        <div
+          style="float: right; margin-top: 7.1%; margin-right: 15%; border: solid 2px black; min-width: 60px; min-height: 28px;" id="total"></div>
+        <div style="float: right; margin-top: 7.3%; margin-right: 2%;"> Valor Total</div>
       </div>
       <button style="float: left; margin-top: 10%;">Finalizar compra</button>
     </div>

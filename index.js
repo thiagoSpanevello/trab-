@@ -30,70 +30,85 @@ app.use(express.static('public'));
 // rotas 
 app.get('/', function (req, res) {
     console.log(req.url);
-    
+
     res.sendFile(path.join(__dirname, "public", 'index.html'));
-    
+
 })
 
 //post prod
-app.post('/produtos', function(req, res){
-    console.log(req.body);
-    
-    connection.query(`insert into produtos(nome, valor) values ('${req.body.nome}', '${req.body.valor}')`, function (error, results, fields) {
-        if (error)
-            res.json(error);
-        else
-            res.json({ "valor": "funfo" })
-    });
+app.post('/produtos', function (req, res) {
+    if (req.body.nome.length != 0) {
+        if (parseFloat(req.body.valor) > 0) {
+            if ((req.body.valor).includes(',')) {
+                res.send({ erro: "erro na formatação do valor" });
+                console.log('formataçao');
+                
+            } else {
+                connection.query(`insert into produtos(nome, valor) values ('${req.body.nome}', '${req.body.valor}')`, function (error, results, fields) {
+                    if (error)
+                        res.json(error);
+                    else
+                        res.json({ "valor": "funfo" })
+                });
+            }
+        } else {
+            res.send({ erro: "valor precisa ser maior que zero" });
+            console.log('maior q zero');
+        }
+    } else {
+        res.send({ erro: "nome obrigatorio" });
+        console.log('nome');
+        
+    }
 })
 
 //get prod
-app.get('/produtos', function(req, res){
-    connection.query(`select * from produtos`, function(error, results, fields){
-        if(error)
-        res.json(error);
+app.get('/produtos', function (req, res) {
+    connection.query(`select * from produtos`, function (error, results, fields) {
+        if (error)
+            res.json(error);
         else
-        res.json(results)
+            res.json(results)
     })
 })
 
 // get vendas
-app.get('/vendas', function(req, res){
-    connection.query(`select * from vendas`, function(error, results, fields){
-        if(error)
-        res.json(error);
+app.get('/vendas', function (req, res) {
+    connection.query(`select * from vendas`, function (error, results, fields) {
+        if (error)
+            res.json(error);
         else
-        res.json(results)
+            res.json(results)
     })
 })
 
 // del prod
- app.delete('/delProdutos/:id', function(req, res){
-     let ide = req.params.id;
-      connection.query(`delete from produtos where id = ${ide}`, function(error, results, fields){
-          if(error)
-          res.json(error)
-          else
-          res.json(results);
-      })
- })
+app.delete('/delProdutos/:id', function (req, res) {
+    let ide = req.params.id;
+    connection.query(`delete from produtos where id = ${ide}`, function (error, results, fields) {
+        if (error)
+            res.json(error)
+        else
+            res.json(results);
+    })
+})
 
 // update prod
-app.patch('/updateProd/:id/:nome/:valor', function(req, res){
+app.patch('/updateProd/:id/:nome/:valor', function (req, res) {
     let ide = req.params.id;
     let nom = req.params.nome;
     let val = req.params.val;
-    
+
 })
 
 //add prod na venda
-app.get('/addProdVenda/:id' , function(req, res){
+app.get('/addProdVenda/:id', function (req, res) {
     let ide = req.params.id;
-    connection.query(`select * from produtos where id = ${ide}`, function(error, results, fields){
-    if(error)
-    res.json(error)
-    else
-    res.json(results);
+    connection.query(`select * from produtos where id = ${ide}`, function (error, results, fields) {
+        if (error)
+            res.json(error)
+        else
+            res.json(results);
     })
 })
 

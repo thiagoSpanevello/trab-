@@ -111,5 +111,9 @@ app.get('/addProdVenda/:id', function (req, res) {
             res.json(results);
     })
 })
+app.post('/itemVenda', function(req, res){
+    console.log(req.body); 
+    res.json('foi brasil')
+})
 
 app.listen(80, function () { console.log('example app listening on port 80') });

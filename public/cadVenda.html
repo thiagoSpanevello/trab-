@@ -19,6 +19,7 @@
   <script>
     let total = 0;
     let idDel = 0
+    let array = [];
     function teste() {
       idDel++;
       var tab = document.getElementById("tab")
@@ -42,21 +43,48 @@
               tab.innerHTML += `<div id="${idDel}" class='row linhas'> <div class='col linhaItem'>${num}</div> <div class='col linhaItem'>${nome}</div> <div class='col linhaItem' style='text-align: center'>${quant} </div><div class='col linhaItem' style='text-align: right'>R$ ${valorFormatado}</div><div><button onclick = "deletar(${idDel}, ${valor})">Delete</button></div></div>`
               let val = valor * quant;
               total += parseFloat(val);
+              console.log(val);
+
               console.log('total add');
-              
               console.log(total);
-            totalTx.innerHTML = 'R$ ' + total.toLocaleString();
+              totalTx.innerHTML = 'R$ ' + total.toLocaleString();
+              let objeto = {
+                "id": num,
+                "quantidade": quant
+              }
+              console.log(objeto.id);
+              console.log(objeto.quantidade);
+              listar(objeto);
             });
           }
         });
-    };  
-    function deletar(idDel, val){
+    };
+    function deletar(idDel, val) {
       document.getElementById(idDel).remove(document.getElementById(idDel));
+      console.log('val');
+      console.log(val);
       total = total - val;
       console.log('total del');
       console.log(total);
       let totalTx = document.getElementById('total');
       totalTx.innerHTML = "R$" + total.toLocaleString();
+    }
+    function listar(objeto) {
+      array.push(objeto)
+      console.log(array);
+    }
+    function a1(array){
+      console.log('array');
+      console.log(array);
+      fetch('http://localhost/itemVenda', {
+                method: 'post',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(array)
+            }).then(function (response) {
+           console.log(response)   
+            })
     }
   </script>
 
@@ -127,10 +155,11 @@
           </div>
         </div>
         <div
-          style="float: right; margin-top: 7.1%; margin-right: 15%; border: solid 2px black; min-width: 60px; min-height: 28px;" id="total"></div>
+          style="float: right; margin-top: 7.1%; margin-right: 15%; border: solid 2px black; min-width: 60px; min-height: 28px;"
+          id="total"></div>
         <div style="float: right; margin-top: 7.3%; margin-right: 2%;"> Valor Total</div>
       </div>
-      <button style="float: left; margin-top: 10%;">Finalizar compra</button>
+      <button style="float: left; margin-top: 10%;" id="fimVenda" onclick="a1(array)">Finalizar compra</button>
     </div>
 </body>
 

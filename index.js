@@ -2,6 +2,7 @@ console.log("ola mundo");
 const bodyparser = require("body-parser");
 const express = require("express");
 const app = express();
+const moment = require('moment');
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
@@ -42,7 +43,7 @@ app.post('/produtos', function (req, res) {
             if ((req.body.valor).includes(',')) {
                 res.send({ erro: "erro na formatação do valor" });
                 console.log('formataçao');
-                
+
             } else {
                 connection.query(`insert into produtos(nome, valor) values ('${req.body.nome}', '${req.body.valor}')`, function (error, results, fields) {
                     if (error)
@@ -58,7 +59,7 @@ app.post('/produtos', function (req, res) {
     } else {
         res.send({ erro: "nome obrigatorio" });
         console.log('nome');
-        
+
     }
 })
 
@@ -111,9 +112,47 @@ app.get('/addProdVenda/:id', function (req, res) {
             res.json(results);
     })
 })
-app.post('/itemVenda', function(req, res){
-    console.log(req.body); 
-    res.json('foi brasil')
+app.post('/itemVenda', function (req, res) {
+    let array = req.body;
+
+    let dataFormata = moment().format('YYYY-MM-DD HH:mm:ss');
+    console.log(dataFormata);
+    console.log(array);
+    connection.query(`insert into vendas(data_hora) values ('${dataFormata}')`, function (error, results, fields) {
+        if (error)
+            res.json(error)
+        else
+            res.json(results);
+        console.log('foi porra');
+        console.log(results);
+        vendaId = results.insertId;
+        array.forEach(i => {
+            let idProd = i.id;
+            console.log(idProd);
+            i.idVenda = vendaId;
+            console.log(i.idVenda);
+            console.log(array);
+            connection.query(`select valor from produtos where id = ${idProd}`, function (error, results, fields) {
+                if (error)
+                    console.log(error);
+                else
+                console.log(results);
+                        console.log(results);
+                        i.valorTotal = results[0].valor * i.quantidade;
+                        console.log(i);
+                        connection.query(`insert into item_venda(venda_id, produto_id, quantidade, valor) values ("${i.idVenda}", "${idProd}","${i.quantidade}", "${i.valorTotal}")`, 
+                        function(error, results, fields){
+                            if(error){
+                                console.log(error);
+                            } else {
+                               console.log('foi');
+                            }
+                        })
+                        
+            })
+        })
+    })
+
 })
 
 app.listen(80, function () { console.log('example app listening on port 80') });

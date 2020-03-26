@@ -23,9 +23,11 @@
             var nome = document.getElementById('nomeProd').value;
             console.log(valor);
             console.log(nome);
-            var string = valor.toString;
-            console.log(string);    
-            var objeto = { 'nome': nome, 'valor': valor };
+            var string = valor.toString;    
+            string.replace("." , "")
+            string.replace("," , ".");
+            var valorformatado = parseFloat(string);
+            var objeto = { 'nome': nome, 'valor': valorformatado };
             console.log('Posting...');
             fetch('http://localhost/produtos', {
                 method: 'post',

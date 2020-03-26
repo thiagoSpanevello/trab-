@@ -18,38 +18,90 @@
 
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-  integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384"></script>
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384"></script>
 
-<script>
+  <script>
 
-function alo(){
-  let url = 'http://localhost/vendas';
-var tab = document.getElementById("tab");
+    function alo() {
+      let url = 'http://localhost/vendas';
+      var tab = document.getElementById("tab");
 
-fetch(url)
-    .then(res => res.json())
-    .then((out) => {
-        console.log('Json ', out);
-        out.forEach(vendas => {
-          let id = vendas.id;
+      fetch(url)
+        .then(res => res.json())
+        .then((out) => {
+          console.log('Json ', out);
+          out.forEach(vendas => {
+            let id = vendas.id;
             let data = vendas.data_hora;
+            let quant = vendas.quantidade;
+            let valorTotal = "R$ " + (vendas.valor).toLocaleString("pt-BR");
+            if (valorTotal.includes(",")) {
+
+            } else {
+              valorTotal = valorTotal + ",00"
+            }
+            console.log(valorTotal);
             console.log(data);
             console.log(id);
-            let regex = /(?<ano>\d\d\d\d)-(?<mes>\d\d)-(?<dia>\d\d)/;
-              let x = data.match(regex);
-              let day = x.groups.dia;
-              console.log(day);
-              
-            
-            tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${id}</span></div> <div class='col linhaItem' style='text-align: right'>${data}</div></div>`
-        });
-    })
-  }
+            let regex = /(?<ano>\d\d\d\d)-(?<mes>\d\d)-(?<dia>\d\d)T(?<hora>\d\d):(?<min>\d\d):(?<seg>\d\d)/;
+            let x = data.match(regex);
+            let dataformatada = " data: " + x.groups.dia + "/" + x.groups.mes + "/" + x.groups.ano + " hora: " + x.groups.hora + ":" + x.groups.min + ":" + x.groups.seg ;
 
-</script>
+            tab.innerHTML += `<div class='row linhas'> <div class='col linhaItem'><span>${id}</span></div> 
+            <div class='col linhaItem' style='text-align: right'>${dataformatada}</div>
+            <div class='col linhaItem' style='text-align: right'>${valorTotal}</div>
+            <div class='col linhaItem' style='text-align: right'>${quant}</div></div>`
+          });
+        })
+    }
+    function busca() {
+      let data_inicio = document.getElementById("data_inicio").value;
+      let data_fim = document.getElementById("data_fim").value;
+      let regex = /(?<dia>\d\d)\/(?<mes>\d\d)\/(?<ano>\d\d\d\d)/;
+      let y = data_fim.match(regex)
+      let h = data_inicio.match(regex);
+      let data_inicio_formatada = data_inicio.replace(regex, '$3-$2-$1')
+      console.log(data_inicio_formatada);
+
+      let data_fim_formatada = y.groups.ano + "-" + y.groups.mes + "-" + y.groups.dia;
+      let url = `http://localhost/BuscaVendas/${data_inicio_formatada}/${data_fim_formatada}`;
+      var tab = document.getElementById("tab");
+      tab.innerHTML = " ";
+
+      fetch(url)
+        .then(res => res.json())
+        .then((out) => {
+          console.log('Json ', out);
+          out.forEach(vendas => {
+            let id = vendas.id;
+            let data = vendas.data_hora;
+            let quant = vendas.quantidade;
+            let valorTotal = "R$ " + (vendas.valor).toLocaleString("pt-BR");
+            if (valorTotal.includes(",")) {
+
+            } else {
+              valorTotal = valorTotal + ",00"
+            }
+            console.log(valorTotal);
+            console.log(data);
+            let regex = /(?<ano>\d\d\d\d)-(?<mes>\d\d)-(?<dia>\d\d)T(?<hora>\d\d):(?<min>\d\d):(?<seg>\d\d)/;
+            let x = data.match(regex);
+            let dataformatada = " data: " + x.groups.dia + "/" + x.groups.mes + "/" + x.groups.ano + " hora: " + x.groups.hora + ":" + x.groups.min + ":" + x.groups.seg ;
+            tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${id}</span></div> 
+            <div class='col linhaItem' style='text-align: right'>${dataformatada}</div>
+            <div class='col linhaItem' style='text-align: right'>${valorTotal}</div>
+            <div class='col linhaItem' style='text-align: right'>${quant}</div></div>`
+          });
+        })
+
+    }
+
+  </script>
 
 </head>
 
@@ -61,10 +113,12 @@ fetch(url)
     <div class="static border-right" id="sidebar-wrapper">
       <div class="sidebar-heading " style="font-size: 40px">Relatório de Vendas</div>
       <div class="list-group list-group-flush">
-        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
+        <div class="list-group-item list-group-item-action bg-dark"
+          style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
         <a href="/cadVenda.html" class="list-group-item list-group-item-action bg-light">Nova venda</a>
         <a href="/listaVenda.html" class="list-group-item list-group-item-action bg-light">Histórico de Vendas</a>
-        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
+        <div class="list-group-item list-group-item-action bg-dark"
+          style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
         <a href="/cadProd.html" class="list-group-item list-group-item-action bg-light">Novo Produto</a>
         <a href="/listaProd.html" class="list-group-item list-group-item-action bg-light">Listagem de Produtos</a>
       </div>
@@ -84,16 +138,27 @@ fetch(url)
           </ul>
         </div>
       </nav>
-      <span>Histórico de Vendas</span>
-      <div class="container col-8" id="tab">
+      <form autocomplete="off"> 
+        <div><input style="margin-left: 16.6%;" type="text" placeholder="Data Inicial" id="data_inicio" /><input
+            style="margin-left: 0.5%;" type="text" placeholder="Data Final" id="data_fim" /><button
+            style="margin-left: 0.5%;" type="button" onclick="busca()">Buscar</button></div>
+      </form>
+      <div class="container col-8">
         <div class="row" style="border: 1px solid black">
           <div class="col" style="border-right: 1px solid black; text-align: center">
             Id
-          </div >
+          </div>
           <div class="col" style="border-right: 1px solid black; text-align: center">
             Data Hora
-          </div >
+          </div>
+          <div class="col" style="border-right: 1px solid black; text-align: center">
+            Valor Total
+          </div>
+          <div class="col" style="border-right: 1px solid black; text-align: center">
+            Quantidade
+          </div>
         </div>
+       <div id="tab"></div> 
       </div>
     </div>
 </body>

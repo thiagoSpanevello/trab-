@@ -75,13 +75,33 @@ app.get('/produtos', function (req, res) {
 
 // get vendas
 app.get('/vendas', function (req, res) {
-    connection.query(`select * from vendas`, function (error, results, fields) {
+    connection.query(`select venda.id, venda.data_hora, sum(iv.valor) as valor, sum(iv.quantidade) as quantidade from vendas venda
+    join item_venda iv on(iv.venda_id = venda.id)
+    where MONTH(venda.data_hora) = MONTH(now())
+    group by venda.id
+    order by venda.data_hora desc`, function (error, results, fields) {
         if (error)
             res.json(error);
         else
             res.json(results)
     })
 })
+app.get('/BuscaVendas/:data_inicial/:data_fim', function (req, res) {
+    let data_ini = req.params.data_inicial;
+    let data_final = req.params.data_fim;
+    connection.query(`select venda.id, venda.data_hora, coalesce(sum(iv.valor), 0) as valor, coalesce(sum(iv.quantidade), 0) as quantidade from vendas venda
+    left join item_venda iv on(iv.venda_id = venda.id)
+    where venda.data_hora between ('${data_ini}') and ('${data_final}')
+    group by venda.id
+    order by venda.data_hora desc;`, function (error, results, fields) {
+        if (error)
+            res.json(error);
+        else
+            res.json(results)
+            console.log(results);
+    })
+})
+
 
 // del prod
 app.delete('/delProdutos/:id', function (req, res) {

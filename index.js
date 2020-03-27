@@ -175,4 +175,16 @@ app.post('/itemVenda', function (req, res) {
 
 })
 
+app.get('/grafProd', function(req, res){
+    connection.query(`select p.nome, round(sum(i.quantidade)*100/(select sum(quantidade) from item_venda)) as porcentagem, (select sum(i.valor)) as valor, (select sum(valor) from item_venda) as total from item_venda i 
+    join produtos p on (p.id = i.produto_id) 
+    group by p.id
+    order by porcentagem desc`, function(error, results, fields){
+        if(error)
+        res.json(error)
+        else
+        res.json(results)
+    })
+})
+
 app.listen(80, function () { console.log('example app listening on port 80') });

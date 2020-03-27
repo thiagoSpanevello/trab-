@@ -23,11 +23,7 @@
             var nome = document.getElementById('nomeProd').value;
             console.log(valor);
             console.log(nome);
-            var string = valor.toString;    
-            string.replace("." , "")
-            string.replace("," , ".");
-            var valorformatado = parseFloat(string);
-            var objeto = { 'nome': nome, 'valor': valorformatado };
+            var objeto = { 'nome': nome, 'valor': valor };
             console.log('Posting...');
             fetch('http://localhost/produtos', {
                 method: 'post',
@@ -42,8 +38,8 @@
                 alert(variavel.erro);   
             });
         }
-        function formatReal()
-{       
+        function formatReal(){
+
         var tmp = document.getElementById('valProd').value + '';
         console.log(tmp);
         tmp = tmp.replace(/([0-9]{2})$/g, ",$1");
@@ -56,7 +52,7 @@
     
 </head >
 
-<body onfocusout="formatReal()">
+<body >
 
     <div class="d-flex" id="wrapper">
 
@@ -66,12 +62,14 @@
             <div class="list-group list-group-flush">
                 <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
                 <a href="/cadVenda.html" class="list-group-item list-group-item-action bg-light">Nova venda</a>
+                <a href="/grafVenda.html" class="list-group-item list-group-item-action bg-light">Grafico de Vendas</a>
                 <a href="/listaVenda.html" class="list-group-item list-group-item-action bg-light">Histórico de
                     Vendas</a>
                 <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;" > Produtos</div>
                 <a href="/cadProd.html" class="list-group-item list-group-item-action bg-light">Novo Produto</a>
                 <a href="/listaProd.html" class="list-group-item list-group-item-action bg-light">Listagem de
                     Produtos</a>
+                    <a href="/grafProd.html" class="list-group-item list-group-item-action bg-light">Grafico de Produtos</a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -94,7 +92,7 @@
                 <h2>Nome do Produto</h2>
                 <input id="nomeProd" maxlength="50"/>
                 <h2>Valor do Produto</h2>
-                <input type="text" id="valProd" min="0" step="0.01" />
+                <input type="text" id="valProd" min="0" step="0.01" onfocusout="formatReal()" />
                 <br>
                 <br>
                 <br>

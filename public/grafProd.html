@@ -2,13 +2,55 @@
 <html lang="en">
 
 <head>
+    <script>
+        var cont = 0;
+        var totalPorcent = 0;
+        var totalProd = 0;
+        function listar() {
+let url = 'http://localhost/grafProd';
+
+
+fetch(url)
+    .then(res => res.json())
+    .then((out) => {
+        console.log('Json', out);
+        out.forEach(Produto => {
+            var name = Produto.nome; 
+            var porcent = Produto.porcentagem;
+            var valor = Produto.valor;
+            var total = Produto.total;
+            totalProd = totalProd + valor;
+            var val = valor.toLocaleString("pr-BR")
+            console.log(porcent);
+            totalPorcent = totalPorcent + porcent;
+            console.log(totalPorcent);
+            totalOutros = total - totalProd;
+            var porcentOutros = 100 - totalPorcent;
+            if (cont != -1){
+            if(cont < 5) {
+            tab.innerHTML += `<div class= "row" style ="margin-top: 2%"> <div class="col-2"><span>${name}</span></div><div  style='width: ${porcent}%; background-color: black!important; height: 20px; margin-top: 9px; margin-left: 19px'><span style="color: white">R$ ${val}</span></div><span style= "margin-top: 5px; margin-left: 3px">${porcent}%</span> `
+            cont++
+            } else {
+                tab.innerHTML += `<div class= "row" style = "margin-top: 2%"> <div class="col-2"><span>outros</span></div> <div style='width: ${porcentOutros}%; background-color: black!important; height: 20px; margin-top: 9px; margin-left: 19px'><span style="color: white">R$ ${totalOutros}</span></div><span style = "margin-top: 5px; margin-left: 3px">${porcentOutros}%</span>`
+                cont = -1;
+            }
+        }
+        });
+    })
+    .catch(err => { throw err });
+}
+
+
+
+
+    </script>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Lojinha do seu João</title>
+  <title>Grafico de Produtos</title>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -19,7 +61,7 @@
 
 </head>
 
-<body>
+<body onload="listar()">
 
   <div class="d-flex" id="wrapper">
 
@@ -52,9 +94,8 @@
           </ul>
         </div>
       </nav>
+      <div id="tab"></div>
 
-      <div class="container-fluid">
-        <h1 class="mt-4">Bien venido manito!!!</h1>
       </div>
     </div>
 </body>

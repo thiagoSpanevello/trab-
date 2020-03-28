@@ -186,5 +186,17 @@ app.get('/grafProd', function(req, res){
         res.json(results)
     })
 })
+app.get('/grafVenda', function(req, res){
+    connection.query(`select day(v.data_hora) as mes, sum(i.valor) as total from item_venda i 
+    join vendas v on (v.id = i.venda_id) where Year(v.data_hora) = Year(now())
+    group by mes;`, function(error, results, fields){
+        if(error){
+            res.json(error)
+        } else {
+            res.json(results)
+            console.log(results);
+        }
+    })
+})
 
 app.listen(80, function () { console.log('example app listening on port 80') });

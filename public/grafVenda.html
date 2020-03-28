@@ -7,6 +7,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    var mes = "";
+    var valor = 0;
+    var array = [];
+    function drawChart() {
+      let url = `http://localhost/grafVenda`;
+      fetch(url)
+        .then(res => res.json())
+        .then((out) => {
+          console.log(out);
+
+          out.forEach(element => {
+            mes = element.mes;
+            valor = element.total;
+            if (mes == 1) {
+              mes = "janeiro"
+            } else if (mes == 2) {
+              mes = "fevereiro"
+            } else if (mes == 3) {
+              mes = "março"
+            } else if (mes == 4) {
+              mes = "abril"
+            } else if (mes == 5) {
+              mes = "maio"
+            } else if (mes == 6) {
+              mes = "junho"
+            } else if (mes == 7) {
+              mes = "julho"
+            } else if (mes == 8) {
+              mes = "agosto"
+            } else if (mes == 9) {
+              mes = "setembro"
+            } else if (mes == 10) {
+              mes = "outubro"
+            } else if (mes == 11) {
+              mes = "novembro"
+            } else if (mes == 12) {
+              mes = "desembro"
+            }
+            var array = []
+            array.push(mes, valor)
+              var data = google.visualization.arrayToDataTable([
+              ["dia", "valor"],
+              [array[0], array[1]]
+            ])
+
+            var options = {
+              title: 'Company Performance',
+              curveType: 'function',
+              legend: { position: 'bottom' }
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+            chart.draw(data, options);
+
+            
+          });
+        
+
+        })
+    }
+
+
+
+
+
+  </script>
 
   <title>Lojinha do seu João</title>
 
@@ -17,6 +88,8 @@
   <!-- Custom styles for this template -->
   <link href="css/simple-sidebar.css" rel="stylesheet">
 
+
+
 </head>
 
 <body>
@@ -25,13 +98,15 @@
 
     <!-- Sidebar -->
     <div class="static border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading " style="font-size: 40px" >Lojinha do seu João </div>
+      <div class="sidebar-heading " style="font-size: 40px">Lojinha do seu João </div>
       <div class="list-group list-group-flush">
-        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
+        <div class="list-group-item list-group-item-action bg-dark"
+          style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
         <a href="/cadVenda.html" class="list-group-item list-group-item-action bg-light">Nova venda</a>
         <a href="/listaVenda.html" class="list-group-item list-group-item-action bg-light">Histórico de Vendas</a>
         <a href="/grafVenda.html" class="list-group-item list-group-item-action bg-light">Grafico de Vendas</a>
-        <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
+        <div class="list-group-item list-group-item-action bg-dark"
+          style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
         <a href="/cadProd.html" class="list-group-item list-group-item-action bg-light">Novo Produto</a>
         <a href="/listaProd.html" class="list-group-item list-group-item-action bg-light">Listagem de Produtos</a>
         <a href="/grafProd.html" class="list-group-item list-group-item-action bg-light">Grafico de Produtos</a>
@@ -52,8 +127,9 @@
           </ul>
         </div>
       </nav>
-      </div>
+      <div id="curve_chart" style="width: 900px; height: 500px"></div>
     </div>
+  </div>
 </body>
 
 </html>

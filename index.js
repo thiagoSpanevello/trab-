@@ -3,6 +3,7 @@ const bodyparser = require("body-parser");
 const express = require("express");
 const app = express();
 const moment = require('moment');
+const path = require('path');
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
@@ -34,6 +35,10 @@ app.get('/', function (req, res) {
 
     res.sendFile(path.join(__dirname, "public", 'index.html'));
 
+})
+app.get('/home', function (req, res) {
+    console.log(req.url);
+    res.sendFile(path.join(__dirname, "public", 'home.html'));
 })
 
 //post prod
@@ -132,9 +137,26 @@ app.get('/addProdVenda/:id', function (req, res) {
             res.json(results);
     })
 })
+app.post('/valSenha', function(req, res){
+let usu = req.body.usuario;
+let senha = req.body.senha;
+console.log(usu);
+console.log(senha);
+connection.query(`select * from usuario where usuario = "${usu}" and senha = "${senha}"`, function(error, results, fields){
+    if (results.length == 0){
+        res.send({"res": error})
+        console.log('porra');
+    } else {
+        console.log('aloo');
+        res.send({"res": "foi porra"})
+        console.log(results);
+        
+    }
+})
+
+})
 app.post('/itemVenda', function (req, res) {
     let array = req.body;
-
     let dataFormata = moment().format('YYYY-MM-DD HH:mm:ss');
     console.log(dataFormata);
     console.log(array);

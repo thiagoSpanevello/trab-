@@ -35,8 +35,20 @@ fetch(url)
             let num = Produto.id;
             let nome = Produto.nome;
             let valor = Produto.valor;
-            
-            tab.innerHTML += `<div class='row linhas'> <div class='col linhaItem'><span>${num}</span></div> <div class='col linhaItem' style='text-align: center'>${nome}</div> <div class='col linhaItem' style='text-align: right'>R$${(valor).toLocaleString("pt-BR")}</div><div class="padding" style: 'text-align: center;'><button type='button' onclick = "editar(${nome}, ${valor})">Edit</button> <button type= "button" onclick = "delProd(${num})">Del</button></div></div>`
+            let valorCerto = "R$ " + (valor).toLocaleString("pt-BR");
+            if(valorCerto.includes(',')){
+            } else {
+              valorCerto = valorCerto + ',00'
+            } 
+            var array = valorCerto.split(',');
+            let tam = array[1].length;
+            if(tam == 1){
+              array[1] = array[1] + '0';
+            }
+            let valArray = array[0] + ',' + array[1];
+            console.log(valArray);
+            valorCerto = valArray.toString();
+            tab.innerHTML += `<div class='row linhas'> <div class='col linhaItem'><span>${num}</span></div> <div class='col linhaItem' style='text-align: center'>${nome}</div> <div class='col linhaItem' style='text-align: right'>${valorCerto}</div><div class="padding" style: 'text-align: center;'><button type="button" onclick="window.location.href='http://localhost/editarProd/${num}'")">Edit</button> <button onclick = "delProd(${num})">Del</button></div></div>`
         });
     })
     .catch(err => { throw err });
@@ -51,9 +63,10 @@ function delProd(num) {
             }).then(function (response) {
                 console.log(response);    
             });
+            window.location.reload();
           };
 
-function updateProd(num, nome, valor){
+function updateProd(num, nome, valorCerto){
   console.log('updating...');
   fetch(`http://localhost/editProd/${num}`, {
     method: 'update',
@@ -64,14 +77,8 @@ function updateProd(num, nome, valor){
     console.log(response);
   })
 };
-function editar(nome, valor){
-  var update = document.getElementById('update');
-  update.innerHTML += `<div><input type = "text" id = "nom"/></div><div><input type = "number" id = "val"/></div>`;
-  var inputNome = document.getElementById('nom');
-  var inputValor = document.getElementById('val');
-  inputNome.value = nome;
-  inputValor.value = valor;
-}
+
+
 </script>
 
 </head>
@@ -86,8 +93,8 @@ function editar(nome, valor){
       <div class="list-group list-group-flush">
         <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;" >Vendas</div>
         <a href="/cadVenda.html" class="list-group-item list-group-item-action bg-light">Nova venda</a>
-        <a href="/grafVenda.html" class="list-group-item list-group-item-action bg-light">Grafico de Vendas</a>
         <a href="/listaVenda.html" class="list-group-item list-group-item-action bg-light">Histórico de Vendas</a>
+        <a href="/grafVenda.html" class="list-group-item list-group-item-action bg-light">Grafico de Vendas</a>
         <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
         <a href="/cadProd.html" class="list-group-item list-group-item-action bg-light">Novo Produto</a>
         <a href="/listaProd.html" class="list-group-item list-group-item-action bg-light">Listagem de Produtos</a>

@@ -21,6 +21,7 @@
     let idDel = 0
     let array = [];
     function teste() {
+      var snackbar = document.getElementById('snackbar');
       idDel++;
       var tab = document.getElementById("tab")
       var num = document.getElementById("pesqProdId").value;
@@ -33,18 +34,21 @@
         .then((out) => {
           console.log('Json', out);
           if (out.length == 0) {
-            alert('id invalido')
+            snackbar.innerHTML = 'Id Invalido';
+            snackbar.className = "show";
+            setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
           } else {
+            document.getElementById('pesqProdId').value = '';
+            document.getElementById('quantidade').value = 1;
             out.forEach(Produto => {
               let nome = Produto.nome;
               let valor = parseFloat(Produto.valor);
               console.log(valor);
               let valorFormatado = valor.toLocaleString();
-              tab.innerHTML += `<div id="${idDel}" class='row linhas'> <div class='col linhaItem'>${num}</div> <div class='col linhaItem'>${nome}</div> <div class='col linhaItem' style='text-align: center'>${quant} </div><div class='col linhaItem' style='text-align: right'>R$ ${valorFormatado}</div><div><button onclick = "deletar(${idDel}, ${valor})">Delete</button></div></div>`
               let val = valor * quant;
+              tab.innerHTML += `<div id="${idDel}" class='row linhas'> <div class='col linhaItem'>${nome}</div> <div class='col linhaItem' style='text-align: center'>${quant} </div><div class='col linhaItem' style='text-align: right'>R$ ${valorFormatado}</div><div><button onclick = "deletar(${idDel}, ${val})">Delete</button></div></div>`
               total += parseFloat(val);
               console.log(val);
-
               console.log('total add');
               console.log(total);
               totalTx.innerHTML = 'R$ ' + total.toLocaleString();
@@ -58,34 +62,48 @@
             });
           }
         });
+      document.getElementById('pesqProdId').value = '';
     };
-    function deletar(idDel, val) {
-      document.getElementById(idDel).remove(document.getElementById(idDel));
+    function deletar(numero, val) {
+      document.getElementById(numero).remove(document.getElementById(numero));
       console.log('val');
       console.log(val);
-      total = total - val;
+      total -= val;
       console.log('total del');
       console.log(total);
       let totalTx = document.getElementById('total');
       totalTx.innerHTML = "R$" + total.toLocaleString();
+      console.log(numero);
+      delete array[numero - 1];
+      console.log('array del');
+      console.log(array);
     }
     function listar(objeto) {
       array.push(objeto)
       console.log(array);
     }
-    function a1(array){
+    function a1(array) {
       console.log('array');
       console.log(array);
-      
+
       fetch('http://localhost/itemVenda', {
-                method: 'post',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(array)
-            }).then(function (response) {
-           console.log(response)   
-            })
+        method: 'post',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(array)
+      }).then(function (response) {
+        console.log(response)
+        if(array.length != 0){
+        snackbar.innerHTML = 'Adicionado com sucesso';
+        snackbar.className = "show";
+        setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+        } else {
+          snackbar.innerHTML = 'Adicione Algum Produto';
+        snackbar.className = "show";
+        setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+        }
+      })
     }
   </script>
 
@@ -103,8 +121,8 @@
         <div class="list-group-item list-group-item-action bg-dark"
           style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
         <a href="/cadVenda.html" class="list-group-item list-group-item-action bg-light">Nova venda</a>
-        <a href="/grafVenda.html" class="list-group-item list-group-item-action bg-light">Grafico de Vendas</a>
         <a href="/listaVenda.html" class="list-group-item list-group-item-action bg-light">Histórico de Vendas</a>
+        <a href="/grafVenda.html" class="list-group-item list-group-item-action bg-light">Grafico de Vendas</a>
         <div class="list-group-item list-group-item-action bg-dark"
           style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
         <a href="/cadProd.html" class="list-group-item list-group-item-action bg-light">Novo Produto</a>
@@ -140,9 +158,6 @@
         <div class="container col-8" id="tab">
           <div class="row" style="border: 1px solid black">
             <div class="col" style="border-right: 1px solid black; text-align: center">
-              id
-            </div>
-            <div class="col" style="border-right: 1px solid black; text-align: center">
               nome
             </div>
             <div class="col" style="border-right: 1px solid black; text-align: center">
@@ -162,8 +177,11 @@
           id="total"></div>
         <div style="float: right; margin-top: 7.3%; margin-right: 2%;"> Valor Total</div>
       </div>
-      <button style="float: left; margin-top: 10%;" id="fimVenda" onclick="a1(array)">Finalizar compra</button>
+      <button style="float: left; margin-top: 10%; margin-left: 16%;" id="fimVenda" onclick="a1(array)">Finalizar
+        compra</button>
     </div>
+
+    <div id="snackbar" style="margin-top: 1%; margin-left: 4%;"></div>
 </body>
 
 </html>

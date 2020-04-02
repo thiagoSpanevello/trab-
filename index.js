@@ -41,28 +41,43 @@ app.get('/home', function (req, res) {
     res.sendFile(path.join(__dirname, "public", 'home.html'));
 })
 
+app.get('/cadUsuario', function (req, res) {
+    console.log(req.url);
+    res.sendFile(path.join(__dirname, "public", 'cadUsuario.html'));
+})
+app.post('/cadUsuario', function (req, res) {
+    let usuario = req.body.nome;
+    let senha = req.body.senha;
+    console.log(usuario);
+    console.log(senha);
+    connection.query(`insert into usuario(usuario, senha) values ('${usuario}', '${senha}')`, function (error, results, fields) {
+        if (error) {
+            res.json(error)
+        } else {
+            res.json(results.insertId);
+        }
+    })
+})
+
 //post prod
 app.post('/produtos', function (req, res) {
+    console.log(req.body.nome);
+    console.log('valor banco');
+    console.log(req.body.valor);
     if (req.body.nome.length != 0) {
         if (parseFloat(req.body.valor) > 0) {
-            if ((req.body.valor).includes(',')) {
-                res.send({ erro: "erro na formatação do valor" });
-                console.log('formataçao');
-
-            } else {
-                connection.query(`insert into produtos(nome, valor) values ('${req.body.nome}', '${req.body.valor}')`, function (error, results, fields) {
-                    if (error)
-                        res.json(error);
-                    else
-                        res.json({ "valor": "funfo" })
-                });
-            }
+            connection.query(`insert into produtos(nome, valor) values ('${req.body.nome}', '${req.body.valor}')`, function (error, results, fields) {
+                if (error)
+                    res.send(error);
+                else
+                    res.send({ "valor": "funfo" })
+            });
         } else {
-            res.send({ erro: "valor precisa ser maior que zero" });
+            res.send({ res: "valor precisa ser maior que zero" });
             console.log('maior q zero');
         }
     } else {
-        res.send({ erro: "nome obrigatorio" });
+        res.send({ res: "nome obrigatorio" });
         console.log('nome');
 
     }
@@ -103,7 +118,7 @@ app.get('/BuscaVendas/:data_inicial/:data_fim', function (req, res) {
             res.json(error);
         else
             res.json(results)
-            console.log(results);
+        console.log(results);
     })
 })
 
@@ -120,11 +135,43 @@ app.delete('/delProdutos/:id', function (req, res) {
 })
 
 // update prod
-app.patch('/updateProd/:id/:nome/:valor', function (req, res) {
+app.get('/updateProd/:id', function (req, res) {
     let ide = req.params.id;
-    let nom = req.params.nome;
-    let val = req.params.val;
+    console.log(req.body);
+    connection.query(`select p.nome, p.valor from produtos p where id = ${ide}`, function (error, results, fields) {
+        if (error) {
+            res.json(error)
+        } else {
+            res.json(results)
+        }
+    })
 
+})
+app.post('/updateProd/:id', function (req, res) {
+    let ide = req.params.id;
+    let nom = req.body.nome;
+    let val = req.body.valor;
+    console.log(nom);
+    console.log(ide);
+    console.log(val);
+    if (req.body.nome.length != 0) {
+        if (parseFloat(req.body.valor) > 0) {
+            connection.query(`update produtos set nome = '${nom}', valor = ${val} where id = ${ide}`, function (error, results, fields) {
+                if (error) {
+                    res.json(error)
+                } else {
+                    res.json(results)
+                }
+            })
+        } else {
+            res.send({ res: "valor precisa ser maior que zero" });
+            console.log('maior q zero');
+        }
+    } else {
+        res.send({ res: "nome obrigatorio" });
+        console.log('nome');
+
+    }
 })
 
 //add prod na venda
@@ -137,22 +184,22 @@ app.get('/addProdVenda/:id', function (req, res) {
             res.json(results);
     })
 })
-app.post('/valSenha', function(req, res){
-let usu = req.body.usuario;
-let senha = req.body.senha;
-console.log(usu);
-console.log(senha);
-connection.query(`select * from usuario where usuario = "${usu}" and senha = "${senha}"`, function(error, results, fields){
-    if (results.length == 0){
-        res.send({"res": error})
-        console.log('porra');
-    } else {
-        console.log('aloo');
-        res.send({"res": "foi porra"})
-        console.log(results);
-        
-    }
-})
+app.post('/valSenha', function (req, res) {
+    let usu = req.body.usuario;
+    let senha = req.body.senha;
+    console.log(usu);
+    console.log(senha);
+    connection.query(`select * from usuario where usuario = "${usu}" and senha = "${senha}"`, function (error, results, fields) {
+        if (results.length == 0) {
+            res.json({ "res": error })
+            console.log('porra');
+        } else {
+            console.log('aloo');
+            res.json(results)
+            console.log(results);
+
+        }
+    })
 
 })
 app.post('/itemVenda', function (req, res) {
@@ -169,50 +216,56 @@ app.post('/itemVenda', function (req, res) {
         console.log(results);
         vendaId = results.insertId;
         array.forEach(i => {
+            if(i == null){
+
+            }  else {
             let idProd = i.id;
             console.log(idProd);
             i.idVenda = vendaId;
             console.log(i.idVenda);
+            console.log('array');
             console.log(array);
             connection.query(`select valor from produtos where id = ${idProd}`, function (error, results, fields) {
                 if (error)
                     console.log(error);
                 else
+                    console.log(results);
                 console.log(results);
-                        console.log(results);
-                        i.valorTotal = results[0].valor * i.quantidade;
-                        console.log(i);
-                        connection.query(`insert into item_venda(venda_id, produto_id, quantidade, valor) values ("${i.idVenda}", "${idProd}","${i.quantidade}", "${i.valorTotal}")`, 
-                        function(error, results, fields){
-                            if(error){
-                                console.log(error);
-                            } else {
-                               console.log('foi');
-                            }
-                        })
-                        
+                i.valorTotal = results[0].valor * i.quantidade;
+                console.log('objeto item venda');
+                console.log(i);
+                connection.query(`insert into item_venda(venda_id, produto_id, quantidade, valor) values ("${i.idVenda}", "${idProd}","${i.quantidade}", "${i.valorTotal}")`,
+                    function (error, results, fields) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('foi');
+                        }
+                    })
+
             })
+        }
         })
     })
 
 })
 
-app.get('/grafProd', function(req, res){
+app.get('/grafProd', function (req, res) {
     connection.query(`select p.nome, round(sum(i.quantidade)*100/(select sum(quantidade) from item_venda)) as porcentagem, (select sum(i.valor)) as valor, (select sum(valor) from item_venda) as total from item_venda i 
     join produtos p on (p.id = i.produto_id) 
     group by p.id
-    order by porcentagem desc`, function(error, results, fields){
-        if(error)
-        res.json(error)
+    order by porcentagem desc`, function (error, results, fields) {
+        if (error)
+            res.json(error)
         else
-        res.json(results)
+            res.json(results)
     })
 })
-app.get('/grafVenda', function(req, res){
-    connection.query(`select day(v.data_hora) as mes, sum(i.valor) as total from item_venda i 
+app.get('/grafVenda', function (req, res) {
+    connection.query(`select MONTH(v.data_hora) as mes, sum(i.valor) as total from item_venda i 
     join vendas v on (v.id = i.venda_id) where Year(v.data_hora) = Year(now())
-    group by mes;`, function(error, results, fields){
-        if(error){
+    group by mes;`, function (error, results, fields) {
+        if (error) {
             res.json(error)
         } else {
             res.json(results)
@@ -220,5 +273,7 @@ app.get('/grafVenda', function(req, res){
         }
     })
 })
-
+app.use(`/editarProd`, function (req, res) {
+    res.sendFile(path.join(__dirname, "public", 'updateProd.html'))
+})
 app.listen(80, function () { console.log('example app listening on port 80') });

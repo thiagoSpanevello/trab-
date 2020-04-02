@@ -10,20 +10,31 @@
 
     <title>Lojinha do seu João</title>
 
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"
+        type="text/javascript"></script>
+
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- Custom styles for this template -->
     <link href="css/simple-sidebar.css" rel="stylesheet">
-    
+
 
     <script>
         function enviar(jsonObj) {
             var valor = document.getElementById('valProd').value;
             var nome = document.getElementById('nomeProd').value;
-            console.log(valor);
-            console.log(nome);
-            var objeto = { 'nome': nome, 'valor': valor };
+            var valorCerto = valor;
+
+            var snackbar = document.getElementById("snackbar");
+            while (valorCerto.includes('.')) {
+                valorCerto = valorCerto.replace('.', "");
+            }
+            valorCerto = valorCerto.replace(',', ".");
+            valorCerto = valorCerto.replace("R$", "");
+            console.log(valorCerto);
+            var objeto = { 'nome': nome, 'valor': valorCerto };
             console.log('Posting...');
             fetch('http://localhost/produtos', {
                 method: 'post',
@@ -32,44 +43,50 @@
                 },
                 body: JSON.stringify(objeto)
             }).then(function (response) {
-            return response.json();
+                return response.json();
                  
-            }).then(function (variavel) {
-                alert(variavel.erro);   
+            }).then(function (data) {
+                console.log("erro: " + data.res);
+                if (data.res != undefined) {
+                    snackbar.innerHTML = data.res;
+                    snackbar.className = "show";
+                    setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+                } else {
+                    snackbar.innerHTML = 'Adicionado com Sucesso';
+                    snackbar.className = "show";
+                    setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+                    document.getElementById('valProd').value = 0;
+                    document.getElementById('nomeProd').value = "";
+                    }
             });
         }
-        function formatReal(){
 
-        var tmp = document.getElementById('valProd').value + '';
-        console.log(tmp);
-        tmp = tmp.replace(/([0-9]{2})$/g, ",$1");
-        if( tmp.length > 6 ){
-                tmp = tmp.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-        }
-        document.getElementById('valProd').value = tmp;
-}
+
+
     </script>
-    
-</head >
 
-<body >
+</head>
+
+<body>
 
     <div class="d-flex" id="wrapper">
 
         <!-- Sidebar -->
         <div class="static border-right" id="sidebar-wrapper">
-            <div class="sidebar-heading" style="font-size: 40px" >Cadastro de Produtos</div>
+            <div class="sidebar-heading" style="font-size: 40px">Cadastro de Produtos</div>
             <div class="list-group list-group-flush">
-                <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
+                <div class="list-group-item list-group-item-action bg-dark"
+                    style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
                 <a href="/cadVenda.html" class="list-group-item list-group-item-action bg-light">Nova venda</a>
-                <a href="/grafVenda.html" class="list-group-item list-group-item-action bg-light">Grafico de Vendas</a>
                 <a href="/listaVenda.html" class="list-group-item list-group-item-action bg-light">Histórico de
                     Vendas</a>
-                <div class="list-group-item list-group-item-action bg-dark" style="font-size: 25px; text-align: center; padding-right: 20%;" > Produtos</div>
+                <a href="/grafVenda.html" class="list-group-item list-group-item-action bg-light">Grafico de Vendas</a>
+                <div class="list-group-item list-group-item-action bg-dark"
+                    style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
                 <a href="/cadProd.html" class="list-group-item list-group-item-action bg-light">Novo Produto</a>
                 <a href="/listaProd.html" class="list-group-item list-group-item-action bg-light">Listagem de
                     Produtos</a>
-                    <a href="/grafProd.html" class="list-group-item list-group-item-action bg-light">Grafico de Produtos</a>
+                <a href="/grafProd.html" class="list-group-item list-group-item-action bg-light">Grafico de Produtos</a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -90,15 +107,18 @@
 
             <form autocomplete="off" class="alinhar">
                 <h2>Nome do Produto</h2>
-                <input id="nomeProd" maxlength="50"/>
+                <input id="nomeProd" maxlength="50" placeholder="Nome"/>
                 <h2>Valor do Produto</h2>
-                <input type="text" id="valProd" min="0" step="0.01" onfocusout="formatReal()" />
+                <input type="text" id="valProd" min="0" step="0.01" placeholder="R$ 0,00"/>
+                <script>$("#valProd").maskMoney({ symbolstay: true, thousands: ".", decimal: ",", prefix: "R$ " })</script>
                 <br>
                 <br>
                 <br>
                 <button class="botao" onclick="enviar()" type="button">Adicionar Produto</button>
+                <br>
+                <div id="snackbar" style="margin-top: 1%; margin-left: 4%;"></div>
             </form>
-           
+
         </div>
 </body>
 

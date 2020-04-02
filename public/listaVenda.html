@@ -39,22 +39,28 @@
             let id = vendas.id;
             let data = vendas.data_hora;
             let quant = vendas.quantidade;
-            let valorTotal = "R$ " + (vendas.valor).toLocaleString("pt-BR");
-            if (valorTotal.includes(",")) {
-
-            } else {
-              valorTotal = valorTotal + ",00"
-            }
-            console.log(valorTotal);
-            console.log(data);
-            console.log(id);
             let regex = /(?<ano>\d\d\d\d)-(?<mes>\d\d)-(?<dia>\d\d)T(?<hora>\d\d):(?<min>\d\d):(?<seg>\d\d)/;
             let x = data.match(regex);
-            let dataformatada = " data: " + x.groups.dia + "/" + x.groups.mes + "/" + x.groups.ano + " hora: " + x.groups.hora + ":" + x.groups.min + ":" + x.groups.seg ;
+            let dataForm = x.groups.dia + "/" + x.groups.mes + "/" + x.groups.ano + "-" +  x.groups.hora + ":" + x.groups.min + ":" + x.groups.seg;
+            console.log(dataForm);
+            let valor = vendas.valor;
+            let valorCerto = "R$ " + (valor).toLocaleString("pt-BR");
+            if(valorCerto.includes(',')){
+            } else {
+              valorCerto = valorCerto + ',00'
+            } 
+            var array = valorCerto.split(',');
+            let tam = array[1].length;
+            if(tam == 1){
+              array[1] = array[1] + '0';
+            }
+            let valArray = array[0] + ',' + array[1];
+            console.log(valArray);
+            valorCerto = valArray.toString();
 
-            tab.innerHTML += `<div class='row linhas'> <div class='col linhaItem'><span>${id}</span></div> 
-            <div class='col linhaItem' style='text-align: right'>${dataformatada}</div>
-            <div class='col linhaItem' style='text-align: right'>${valorTotal}</div>
+            tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${id}</span></div> 
+            <div class='col linhaItem' style='text-align: right'>${dataForm}</div>
+            <div class='col linhaItem' style='text-align: right'>R$ ${valorCerto}</div>
             <div class='col linhaItem' style='text-align: right'>${quant}</div></div>`
           });
         })
@@ -81,20 +87,14 @@
             let id = vendas.id;
             let data = vendas.data_hora;
             let quant = vendas.quantidade;
-            let valorTotal = "R$ " + (vendas.valor).toLocaleString("pt-BR");
-            if (valorTotal.includes(",")) {
 
-            } else {
-              valorTotal = valorTotal + ",00"
-            }
-            console.log(valorTotal);
-            console.log(data);
             let regex = /(?<ano>\d\d\d\d)-(?<mes>\d\d)-(?<dia>\d\d)T(?<hora>\d\d):(?<min>\d\d):(?<seg>\d\d)/;
             let x = data.match(regex);
-            let dataformatada = " data: " + x.groups.dia + "/" + x.groups.mes + "/" + x.groups.ano + " hora: " + x.groups.hora + ":" + x.groups.min + ":" + x.groups.seg ;
+            let dataForm = x.groups.dia + "/" + x.groups.mes + "/" + x.groups.ano + x.groups.hora + ":" + x.groups.min + ":" + x.groups.seg;
+            console.log(dataForm);
             tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${id}</span></div> 
-            <div class='col linhaItem' style='text-align: right'>${dataformatada}</div>
-            <div class='col linhaItem' style='text-align: right'>${valorTotal}</div>
+            <div class='col linhaItem' style='text-align: right'>${dataForm}</div>
+            <div class='col linhaItem' style='text-align: right'>R$ ${parseFloat(vendas.valor).toFixed(2).toLocaleString('pt-BR')}</div>
             <div class='col linhaItem' style='text-align: right'>${quant}</div></div>`
           });
         })
@@ -116,8 +116,8 @@
         <div class="list-group-item list-group-item-action bg-dark"
           style="font-size: 25px; text-align: center; padding-right: 20%;">Vendas</div>
         <a href="/cadVenda.html" class="list-group-item list-group-item-action bg-light">Nova venda</a>
-        <a href="/grafVenda.html" class="list-group-item list-group-item-action bg-light">Grafico de Vendas</a>
         <a href="/listaVenda.html" class="list-group-item list-group-item-action bg-light">Histórico de Vendas</a>
+        <a href="/grafVenda.html" class="list-group-item list-group-item-action bg-light">Grafico de Vendas</a>
         <div class="list-group-item list-group-item-action bg-dark"
           style="font-size: 25px; text-align: center; padding-right: 20%;"> Produtos</div>
         <a href="/cadProd.html" class="list-group-item list-group-item-action bg-light">Novo Produto</a>
@@ -140,7 +140,7 @@
           </ul>
         </div>
       </nav>
-      <form autocomplete="off"> 
+      <form autocomplete="off">
         <div><input style="margin-left: 16.6%;" type="text" placeholder="Data Inicial" id="data_inicio" /><input
             style="margin-left: 0.5%;" type="text" placeholder="Data Final" id="data_fim" /><button
             style="margin-left: 0.5%;" type="button" onclick="busca()">Buscar</button></div>
@@ -160,7 +160,7 @@
             Quantidade
           </div>
         </div>
-       <div id="tab"></div> 
+        <div id="tab"></div>
       </div>
     </div>
 </body>

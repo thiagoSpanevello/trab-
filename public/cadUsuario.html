@@ -28,6 +28,7 @@
                         body: JSON.stringify(objeto)
                     }).then(function (response) {
                         return response.json();
+                        window.history.back();
                     })
                 } else {
                     snackbar.innerHTML = "Senhas Diferentes"
@@ -36,7 +37,6 @@
                 }
 
             }
-            window.history.back();
         }
     </script>
 

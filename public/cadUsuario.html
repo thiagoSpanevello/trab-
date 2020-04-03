@@ -28,8 +28,8 @@
                         body: JSON.stringify(objeto)
                     }).then(function (response) {
                         return response.json();
-                        window.history.back();
                     })
+                    window.history.back();
                 } else {
                     snackbar.innerHTML = "Senhas Diferentes"
                     snackbar.className = "show";

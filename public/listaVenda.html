@@ -44,7 +44,7 @@
             let dataForm = x.groups.dia + "/" + x.groups.mes + "/" + x.groups.ano + "-" +  x.groups.hora + ":" + x.groups.min + ":" + x.groups.seg;
             console.log(dataForm);
             let valor = vendas.valor;
-            let valorCerto = "R$ " + (valor).toLocaleString("pt-BR");
+            let valorCerto = (valor).toLocaleString("pt-BR");
             if(valorCerto.includes(',')){
             } else {
               valorCerto = valorCerto + ',00'
@@ -60,7 +60,7 @@
 
             tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${id}</span></div> 
             <div class='col linhaItem' style='text-align: right'>${dataForm}</div>
-            <div class='col linhaItem' style='text-align: right;max-width: 265.23px!important;overflow: hiddes;'>${valorCerto}</div>
+            <div class='col linhaItem' style='text-align: right;max-width: 265.23px!important;overflow: hiddes;'>R$ ${valorCerto}</div>
             <div class='col linhaItem' style='text-align: right'>${quant}</div></div>`
           });
         })

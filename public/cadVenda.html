@@ -17,7 +17,7 @@
   <!-- Custom styles for this template -->
   <link href="css/simple-sidebar.css" rel="stylesheet">
   <script>
- let server = 'https://lojinha-seu-joao.herokuapp.com';    let total = 0;
+    let server = 'https://lojinha-seu-joao.herokuapp.com'; let total = 0;
     let idDel = 0
     let array = [];
     function teste() {
@@ -94,14 +94,14 @@
         body: JSON.stringify(array)
       }).then(function (response) {
         console.log(response)
-        if(array.length != 0){
-        snackbar.innerHTML = 'Adicionado com sucesso';
-        snackbar.className = "show";
-        setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+        if (array.length != 0) {
+          snackbar.innerHTML = 'Adicionado com sucesso';
+          snackbar.className = "show";
+          setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
         } else {
           snackbar.innerHTML = 'Adicione Algum Produto';
-        snackbar.className = "show";
-        setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+          snackbar.className = "show";
+          setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
         }
       })
     }
@@ -152,7 +152,8 @@
           <br>
           <input style="margin-left: 16.7%; width: 30%" id="pesqProdId" type="number" min="0"
             placeholder="Pesquisa Produto(id)" />
-          <input type="number" , id="quantidade" , min="1" , max="100", style="width: 4%" , value="1", placeholder="1" />
+          <input type="number" , id="quantidade" , min="1" , max="100" , style="width: 4%" , value="1" ,
+            placeholder="1" />
           <button type="button" onclick="teste()">Adicionar Produto</button>
         </form>
         <div class="container col-8" id="tab">
@@ -175,7 +176,7 @@
         <div
           style="float: right; margin-top: 7.1%; margin-right: 15%; border: solid 2px black; min-width: 60px; min-height: 28px;"
           id="total"></div>
-        <div style="float: right; margin-top: 7.3%; margin-right: 2%;"> Valor Total</div>
+        <div style="float: right; margin-top: 7.3%; margin-right: 2%; overflow: hidden; max-width: 220px!important"> Valor Total</div>
       </div>
       <button style="float: left; margin-top: 10%; margin-left: 16%;" id="fimVenda" onclick="a1(array)">Finalizar
         compra</button>

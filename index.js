@@ -44,6 +44,10 @@ app.get('/home', function (req, res) {
     res.sendFile(path.join(__dirname, "public", 'home.html'));
 })
 
+app.use(`/editarProd`, function (req, res) {
+    res.sendFile(path.join(__dirname, "public", 'updateProd.html'))
+})
+
 app.get('/cadUsuario', function (req, res) {
     console.log(req.url);
     res.sendFile(path.join(__dirname, "public", 'cadUsuario.html'));
@@ -279,9 +283,7 @@ app.get('/grafVenda', function (req, res) {
         }
     })
 })
-app.use(`/editarProd`, function (req, res) {
-    res.sendFile(path.join(__dirname, "public", 'updateProd.html'))
-})
+
 app.listen(process.env.PORT || 3000, function(){
    console.log('rodando na porta: ' + (process.env.PORT || 3000));
 });

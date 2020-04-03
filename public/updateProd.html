@@ -279,7 +279,7 @@ border: solid black 2px;
             <form>
                 <input type="text" style="margin-top: 6%; margin-left: 30%;" id="nome" />
                 <br>
-                <input type="text" style="margin-top: 3%!important; margin-left: 30%;" placeholder="R$ 0,00" id="valor" />
+                <input type="text" style="margin-top: 3%!important; margin-left: 30%;" maxlength="17" placeholder="R$ 0,00" id="valor" />
                 <script> $("#valor").maskMoney({symbolstay: true, thousands:".",decimal:",",prefix:"R$ "})</script>
                 <br>
                 <button type="button" style="margin-top: 4%; margin-left: 42%;" onclick="atualizar()">Salvar</button>

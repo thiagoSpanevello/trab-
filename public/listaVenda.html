@@ -94,7 +94,7 @@
             console.log(dataForm);
             tab.innerHTML += `<div class='row linhas' > <div class='col linhaItem'><span>${id}</span></div> 
             <div class='col linhaItem' style='text-align: right'>${dataForm}</div>
-            <div class='col linhaItem' style='text-align: right'>R$ ${parseFloat(vendas.valor).toFixed(2).toLocaleString('pt-BR')}</div>
+            <div class='col linhaItem' style='text-align: right'; max-width: 265.23px>R$ ${parseFloat(vendas.valor).toFixed(2).toLocaleString('pt-BR')}</div>
             <div class='col linhaItem' style='text-align: right'>${quant}</div></div>`
           });
         })

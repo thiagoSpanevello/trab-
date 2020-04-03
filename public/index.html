@@ -4,6 +4,7 @@
 
 
   <script>
+    let server = 'http://localhost:3000';
     function azedo() {
       var usu = document.getElementById('usuario').value;
       var pass = document.getElementById('senha').value;
@@ -12,7 +13,7 @@
         var usuario = { 'usuario': usu, 'senha': pass };
         console.log(usuario);
         console.log('Posting...');
-        fetch('http://localhost/valSenha', {
+        fetch( server + "/valSenha", {
           method: 'post',
           headers: {
             "Content-Type": "application/json"
@@ -22,7 +23,7 @@
           .then((out) => {
             out.forEach(log => {
               if (log.usuario == usu && log.senha == pass) {
-                window.location.href = "http://localhost/home";
+                window.location.href = server + "/home";
                 console.log('nome');
                 console.log(log.usuario);
               } else {
@@ -31,12 +32,18 @@
                 setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
               }
             })
+          }).then(function (data){
+            console.log(data.res);
+            if(data.res != undefined){
+              snackbar.innerHTML = "Senhas ou Usuario Invalidos"
+              snackbar.className = "show";
+              setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000); 
+            }else{
+
+            }
           })
-      } else {
-        snackbar.innerHTML = "Senhas ou Usuario Invalidos"
-        snackbar.className = "show";
-        setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
-      }
+
+          }
     }
 
   </script>

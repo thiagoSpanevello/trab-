@@ -17,6 +17,7 @@
   <!-- Custom styles for this template -->
   <link href="css/simple-sidebar.css" rel="stylesheet">
   <script>
+        let server = 'http://localhost:3000';
     let total = 0;
     let idDel = 0
     let array = [];
@@ -28,7 +29,7 @@
       var totalTx = document.getElementById("total");
       let quant = parseFloat(document.getElementById('quantidade').value)
       console.log(num);
-      let url = `http://localhost/addProdVenda/${num}`;
+      let url = server + `/addProdVenda/${num}`;
       fetch(url)
         .then(res => res.json())
         .then((out) => {
@@ -86,7 +87,7 @@
       console.log('array');
       console.log(array);
 
-      fetch('http://localhost/itemVenda', {
+      fetch(server + '/itemVenda', {
         method: 'post',
         headers: {
           "Content-Type": "application/json"

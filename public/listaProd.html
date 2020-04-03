@@ -22,9 +22,10 @@
 
 
 <script>
+      let server = 'http://localhost:3000';
 
 function listar() {
-let url = 'http://localhost/produtos';
+let url = server + '/produtos';
 var tab = document.getElementById("tabela");
 
 fetch(url)
@@ -55,7 +56,7 @@ fetch(url)
 }
 function delProd(num) {
             console.log('deleting...');
-            fetch(`http://localhost/delProdutos/${num}`, {
+            fetch(server + `/delProdutos/${num}`, {
                 method: 'delete',
                 headers: {
                     "Content-Type": "application/json"
@@ -68,7 +69,7 @@ function delProd(num) {
 
 function updateProd(num, nome, valorCerto){
   console.log('updating...');
-  fetch(`http://localhost/editProd/${num}`, {
+  fetch(server + `/editProd/${num}`, {
     method: 'update',
     headers:{
       "Content-Type": "application/json"

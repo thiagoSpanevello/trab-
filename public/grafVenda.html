@@ -9,13 +9,14 @@
   <meta name="author" content="">
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script>
+        let server = 'http://localhost:3000';
     google.charts.load('current', { 'packages': ['corechart'] });
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
       var column = ["mes", "valor"]
       let dados = [];
       dados.push(column);
-      let url = `http://localhost/grafVenda`;
+      let url = server + `/grafVenda`;
       fetch(url)
         .then(res => res.json())
         .then((out) => {

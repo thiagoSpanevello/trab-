@@ -23,12 +23,14 @@
     <link href="css/simple-sidebar.css" rel="stylesheet">
 
     <script>
+
+        let server = 'http://localhost:3000';
         var array = (window.location.href).split('/');
         console.log(array);
         let id = array[4];
         console.log(id);
         function listar() {
-            let url = `http://localhost/updateProd/${id}`;
+            let url = server + `/updateProd/${id}`;
 
             fetch(url)
                 .then(res => res.json())
@@ -56,7 +58,7 @@
             var att = ({ 'nome': name, 'valor': valorCerto });
             console.log(att);
             console.log('Posting...');
-            fetch(`http://localhost/updateProd/${id}`, {
+            fetch(server + `/updateProd/${id}`, {
                 method: 'post',
                 headers: {
                     "Content-Type": "application/json"

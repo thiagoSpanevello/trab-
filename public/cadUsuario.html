@@ -5,6 +5,7 @@
 
 
     <script>
+            let server = 'http://localhost:3000';
         function cadastrar(){
             let nomeUsu = document.getElementById('usuario').value;
             let primSen = document.getElementById('senha1').value;
@@ -14,7 +15,7 @@
                 let objeto = ({'nome': nomeUsu, 'senha': primSen});
                 console.log(objeto);
             console.log('Posting...');
-            fetch('http://localhost/cadUsuario', {
+            fetch(server + '/cadUsuario', {
                 method: 'post',
                 headers: {
                     "Content-Type": "application/json"

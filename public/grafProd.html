@@ -3,11 +3,12 @@
 
 <head>
     <script>
+          let server = 'http://localhost:3000';
         var cont = 0;
         var totalPorcent = 0;
         var totalProd = 0;
         function listar() {
-let url = 'http://localhost/grafProd';
+let url = server + '/grafProd';
 
 
 fetch(url)

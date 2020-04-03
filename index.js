@@ -4,16 +4,19 @@ const express = require("express");
 const app = express();
 const moment = require('moment');
 const path = require('path');
+const cors = require('cors');
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
+app.use(cors());
+let server = 'http://localhost:3000';
 
 const mysql = require("mysql");
 const connection = mysql.createConnection({
-    host: "localhost",
+    host: "remotemysql.com",
     port: "3306",
-    user: "root",
-    password: "",
-    database: "mydb"
+    user: "j7jFgirhGv",
+    password: "0omtrnNYxY",
+    database: "j7jFgirhGv"
 });
 
 connection.connect(function (err) {
@@ -30,7 +33,7 @@ app.use(express.static('public'));
 
 
 // rotas 
-app.get('/', function (req, res) {
+app.get(':3000/', function (req, res) {
     console.log(req.url);
 
     res.sendFile(path.join(__dirname, "public", 'index.html'));
@@ -185,19 +188,22 @@ app.get('/addProdVenda/:id', function (req, res) {
     })
 })
 app.post('/valSenha', function (req, res) {
+    console.log('entrou no backend');
     let usu = req.body.usuario;
     let senha = req.body.senha;
     console.log(usu);
     console.log(senha);
     connection.query(`select * from usuario where usuario = "${usu}" and senha = "${senha}"`, function (error, results, fields) {
-        if (results.length == 0) {
+        if (error) {
             res.json({ "res": error })
-            console.log('porra');
         } else {
-            console.log('aloo');
-            res.json(results)
-            console.log(results);
-
+            if(results.length == 0){
+                res.send({res: "usuario ou senha invalidos"})
+            } else {
+                console.log('aloo');
+                res.json(results)
+                console.log(results);
+            }
         }
     })
 
@@ -276,4 +282,6 @@ app.get('/grafVenda', function (req, res) {
 app.use(`/editarProd`, function (req, res) {
     res.sendFile(path.join(__dirname, "public", 'updateProd.html'))
 })
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000, function(){
+   console.log('rodando na porta: ' + (process.env.PORT || 3000));
+});

@@ -22,6 +22,7 @@
 
 
     <script>
+            let server = 'http://localhost:3000';
         function enviar(jsonObj) {
             var valor = document.getElementById('valProd').value;
             var nome = document.getElementById('nomeProd').value;
@@ -36,7 +37,7 @@
             console.log(valorCerto);
             var objeto = { 'nome': nome, 'valor': valorCerto };
             console.log('Posting...');
-            fetch('http://localhost/produtos', {
+            fetch(server + '/produtos', {
                 method: 'post',
                 headers: {
                     "Content-Type": "application/json"

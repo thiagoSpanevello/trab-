@@ -26,9 +26,10 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384"></script>
 
   <script>
+        let server = 'http://localhost:3000';
 
     function alo() {
-      let url = 'http://localhost/vendas';
+      let url = server + '/vendas';
       var tab = document.getElementById("tab");
 
       fetch(url)
@@ -75,7 +76,7 @@
       console.log(data_inicio_formatada);
 
       let data_fim_formatada = y.groups.ano + "-" + y.groups.mes + "-" + y.groups.dia;
-      let url = `http://localhost/BuscaVendas/${data_inicio_formatada}/${data_fim_formatada}`;
+      let url = server + `/BuscaVendas/${data_inicio_formatada}/${data_fim_formatada}`;
       var tab = document.getElementById("tab");
       tab.innerHTML = " ";
 

@@ -48,7 +48,7 @@ fetch(url)
             let valArray = array[0] + ',' + array[1];
             console.log(valArray);
             valorCerto = valArray.toString();
-            tab.innerHTML += `<div class='row linhas'> <div class='col linhaItem'><span>${num}</span></div> <div class='col linhaItem' style='text-align: center'>${nome}</div> <div class='col linhaItem' style='text-align: right; overflow: hidden; max-width: 312.52'>${valorCerto}</div><div class="padding" style: 'text-align: center;'><button type="button" onclick="window.location.href='https://lojinha-seu-joao.herokuapp.com/editarProd/${num}'")">Edit</button> <button onclick = "delProd(${num})">Del</button></div></div>`
+            tab.innerHTML += `<div class='row linhas'> <div class='col linhaItem'><span>${num}</span></div> <div class='col linhaItem' style='text-align: center'>${nome}</div> <div class='col linhaItem' style='text-align: right; overflow: hidden; max-width: 312.52px'>${valorCerto}</div><div class="padding" style: 'text-align: center;'><button type="button" onclick="window.location.href='https://lojinha-seu-joao.herokuapp.com/editarProd/${num}'")">Edit</button> <button onclick = "delProd(${num})">Del</button></div></div>`
         });
     })
     .catch(err => { throw err });

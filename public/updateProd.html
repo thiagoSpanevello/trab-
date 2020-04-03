@@ -40,6 +40,13 @@ var array = (window.location.href).split('/');
                         let nome = Produto.nome;
                         document.getElementById('nome').value = nome
                         document.getElementById('valor').value = parseFloat(Produto.valor).toFixed(2);
+                        $("#valor").maskMoney({
+                    prefix: 'R$ ',
+                    thousands: '.',
+                    decimal: ',',
+                    symbolStay: true,
+                    numeralMaxLength: true
+                }).trigger('mask.maskMoney');
                     });
                 })
                 .catch(err => { throw err });
@@ -47,6 +54,7 @@ var array = (window.location.href).split('/');
         function atualizar() {
             var name = document.getElementById('nome').value;
             var val = document.getElementById('valor').value;
+            
             var valorCerto = val;
             var snackbar = document.getElementById('snackbar');
             while (valorCerto.includes('.')) {
@@ -277,7 +285,7 @@ border: solid black 2px;
                 <button type="button" style="margin-top: 4%; margin-left: 42%;" onclick="atualizar()">Salvar</button>
                 <br>
                 <br>
-                <div id="snackbar" style="margin-top: 1%; margin-left: 4%;"></div>
+                <div id="snackbar" style="margin-top: 1%; margin-left: 1%;"></div>
             </form>
         </div>
         </div>
